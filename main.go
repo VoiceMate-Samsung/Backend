@@ -35,8 +35,11 @@ func main() {
 		})
 	})
 
-	api := r.Group("/api")
-	routes.ChatRoutes(api, cfg)
+	chatApi := r.Group("/api/chat")
+	routes.ChatRoutes(chatApi, cfg)
+
+	chessApi := r.Group("/api/chess")
+	routes.ChessRoutes(chessApi, cfg)
 
 	fmt.Printf("Base URL: http://localhost:%s/\n", cfg.Port)
 

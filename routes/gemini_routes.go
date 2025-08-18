@@ -10,5 +10,5 @@ import (
 func ChatRoutes(router *gin.RouterGroup, cfg *config.Config) {
 	chatController := controllers.NewChatController(cfg)
 
-	router.POST("/chat", chatController.Chat)
+	router.POST("/gemini", chatController.Chat)
 }
