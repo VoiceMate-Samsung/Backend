@@ -48,14 +48,17 @@ func (a *AnalysisService) StockfishAnalyze(fen string, botLevel string) (models.
 	}
 
 	var depth int
-	case botLevel {
-		"easy":
-			depth = BotLevelEasy
-		"medium":
-			depth = BotLevelMedium
-		"hard":
-			depth = BotLevelHard
+	switch botLevel {
+	case "easy":
+		depth = models.BotLevelEasy
+	case "medium":
+		depth = models.BotLevelMedium
+	case "hard":
+		depth = models.BotLevelhard
+	default:
+		depth = models.BotLevelMedium
 	}
+
 	searchBestMove := uci.CmdGo{Depth: depth}
 
 	err = engine.Run(searchBestMove)
