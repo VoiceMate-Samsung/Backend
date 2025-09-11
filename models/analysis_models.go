@@ -5,6 +5,12 @@ type Move struct {
 	Fen  string `db:"fen"`
 }
 
+type MoveAnalysis struct {
+	Move     string `json:"move"`
+	Fen      string `json:"fen"`
+	BestMove string `json:"best_move"`
+}
+
 type Game struct {
 	GameID     string `db:"game_id"`
 	Date       string `db:"date"`

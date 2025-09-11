@@ -32,9 +32,11 @@ func main() {
 
 	gameplayRepo := repo.NewGameplayRepo(database)
 	analysisRepo := repo.NewAnalysisRepo(database)
+	userRepo := repo.NewUserRepo(database)
 
 	analysisService := services.NewAnalysisService(analysisRepo)
 	gameplayService := services.NewGameplayService(gameplayRepo, analysisService)
+	userService := services.NewUserService(userRepo)
 
 	gin.SetMode(cfg.GinMode)
 
@@ -63,6 +65,9 @@ func main() {
 
 	analysisApi := r.Group("/api/analysis")
 	routes.AnalysisRoutes(analysisApi, cfg, analysisService)
+
+	userApi := r.Group("/api/user")
+	routes.UserRoutes(userApi, cfg, userService)
 
 	log.Printf("Base URL: http://localhost:%s/\n", cfg.Port)
 

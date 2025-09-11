@@ -89,6 +89,31 @@ func (a *AnalysisService) GetGameHistoryList(userID string) ([]models.Game, erro
 		err = fmt.Errorf("AnalysisService-GetGameHistoryList-GetGameHistoryList: %w", err)
 		return []models.Game{}, err
 	}
-	
+
 	return games, nil
+}
+
+func (a *AnalysisService) GetAnalyzedMoveByOrder(moveOrder int, gameID string) (models.MoveAnalysis, error) {
+	var analyzedMove models.MoveAnalysis
+
+	move, err := a.analysisRepo.GetMoveByOrder(moveOrder, gameID)
+	if err != nil {
+		err = fmt.Errorf("AnalysisService-GetAnalyzedMoveByOrder-GetMoveByOrder: %w", err)
+		return models.MoveAnalysis{}, err
+	}
+
+	analyzedMove = models.MoveAnalysis{
+		Move: move.Move,
+		Fen:  move.Fen,
+	}
+	
+	stockfishResult, err := a.StockfishAnalyze(move.Fen, "hard")
+	if err != nil {
+		err = fmt.Errorf("AnalysisService-GetAnalyzedMoveByOrder-StockfishAnalyze: %w", err)
+		return models.MoveAnalysis{}, err
+	}
+
+	analyzedMove.BestMove = stockfishResult.BestMove
+
+	return analyzedMove, nil
 }

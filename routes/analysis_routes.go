@@ -11,4 +11,5 @@ func AnalysisRoutes(router *gin.RouterGroup, cfg *config.Config, service *servic
 	analysisController := controllers.NewAnalysisController(cfg, service)
 
 	router.GET("/:user_id/games", analysisController.GetGameHistoryList)
+	router.GET("/game/:game_id/move/:move_order", analysisController.GetAnalyzedMoveByOrder)
 }
