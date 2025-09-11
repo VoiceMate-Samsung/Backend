@@ -24,7 +24,6 @@ func NewGameplayController(cfg *config.Config, service *services.GameplayService
 
 func (gc *GameplayController) PlayerMove(c *gin.Context) {
 	gameID := c.Param("game_id")
-	userID := c.Param("user_id")
 
 	var req models.PlayerMoveRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -33,7 +32,7 @@ func (gc *GameplayController) PlayerMove(c *gin.Context) {
 		return
 	}
 
-	botMove, err := gc.Service.PlayerMove(userID, gameID, req.Fen, req.Move, req.BotLevel)
+	botMove, err := gc.Service.PlayerMove(gameID, req.Fen, req.Move, req.BotLevel)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		log.Println("GameplayController-PlayerMove-PlayerMove", err)

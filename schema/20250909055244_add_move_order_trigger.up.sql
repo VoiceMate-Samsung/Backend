@@ -4,7 +4,7 @@ BEGIN
 SELECT COALESCE(MAX(move_order), 0) + 1
 INTO NEW.move_order
 FROM moves
-WHERE game_id = NEW.game_id AND user_id = NEW.user_id;
+WHERE game_id = NEW.game_id;
 
 RETURN NEW;
 END;

@@ -3,15 +3,14 @@ package pg_sql
 var (
 	GetGameHistoryList = `
 	SELECT
-		game_id,
-		created_at AS date,
-		fen,
-		move_amount,
-		result,
-		end_type
+		games.id as id,
+		games.created_at AS date,
+		COUNT(moves.id) AS move_amount
 	FROM public.games
-	WHERE user_id = $1 AND game_id = $2
-	ORDER BY created_at DESC
+		INNER JOIN public.moves ON moves.game_id = games.id
+	WHERE user_id = $1
+	GROUP BY games.id, games.created_at
+	ORDER BY games.created_at DESC
 	`
 
 	GetMoveByOrder = `

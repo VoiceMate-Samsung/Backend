@@ -24,9 +24,9 @@ func (r *AnalysisRepo) GetMoveByOrder(userID, gameID string) (models.Move, error
 	return move, nil
 }
 
-func (r *AnalysisRepo) GetGameHistoryList(userID string, gameID string) ([]models.Game, error) {
+func (r *AnalysisRepo) GetGameHistoryList(userID string) ([]models.Game, error) {
 	var games []models.Game
-	rows, err := r.db.Query(pg_sql.GetGameHistoryList, userID, gameID)
+	rows, err := r.db.Query(pg_sql.GetGameHistoryList, userID)
 	if err != nil {
 		return []models.Game{}, err
 	}
@@ -34,7 +34,7 @@ func (r *AnalysisRepo) GetGameHistoryList(userID string, gameID string) ([]model
 
 	for rows.Next() {
 		var game models.Game
-		if err := rows.Scan(&game.GameID, &game.Date, &game.Fen, &game.MoveAmount, &game.Result, &game.EndType); err != nil {
+		if err := rows.Scan(&game.GameID, &game.Date, &game.MoveAmount); err != nil {
 			return []models.Game{}, err
 		}
 		games = append(games, game)

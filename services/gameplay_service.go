@@ -19,17 +19,24 @@ func NewGameplayService(gameplayRepo *repo.GameplayRepo, analysisService *Analys
 	}
 }
 
-func (s *GameplayService) PlayerMove(userID, gameID, fen, move, botLevel string) (models.BotMove, error) {
+func (s *GameplayService) PlayerMove(gameID, fen, move, botLevel string) (models.BotMove, error) {
 	err := s.gameplayRepo.GameMove(gameID, fen, move)
 	if err != nil {
 		err = fmt.Errorf("GameplayService-PlayerMove-GameMove: %w", err)
-		fmt.Printf("userID: %s, gameID: %s, fen: %s, move: %s", userID, gameID, fen, move)
+		fmt.Printf("gameID: %s, fen: %s, move: %s", gameID, fen, move)
 		return models.BotMove{}, err
 	}
 
 	analysisResult, err := s.analysisService.StockfishAnalyze(fen, botLevel)
 	if err != nil {
 		err = fmt.Errorf("GameplayService-PlayerMove-GameMove: %w", err)
+		return models.BotMove{}, err
+	}
+
+	err = s.gameplayRepo.GameMove(gameID, analysisResult.Fen, analysisResult.BestMove)
+	if err != nil {
+		err = fmt.Errorf("GameplayService-PlayerMove-GameMove: %w", err)
+		fmt.Printf("gameID: %s, fen: %s, move: %s", gameID, fen, move)
 		return models.BotMove{}, err
 	}
 

@@ -82,3 +82,13 @@ func (a *AnalysisService) StockfishAnalyze(fen string, botLevel string) (models.
 
 	return analysisResult, nil
 }
+
+func (a *AnalysisService) GetGameHistoryList(userID string) ([]models.Game, error) {
+	games, err := a.analysisRepo.GetGameHistoryList(userID)
+	if err != nil {
+		err = fmt.Errorf("AnalysisService-GetGameHistoryList-GetGameHistoryList: %w", err)
+		return []models.Game{}, err
+	}
+	
+	return games, nil
+}

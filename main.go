@@ -22,7 +22,6 @@ func main() {
 		log.Fatal("❌ GEMINI_API_KEY not configured")
 	}
 
-	// Database connection using your existing db package
 	database, err := db.New()
 	if err != nil {
 		log.Fatal("❌ Failed to connect to database:", err)
@@ -31,7 +30,6 @@ func main() {
 
 	log.Println("✅ Database connected successfully")
 
-	// Initialize repositories
 	gameplayRepo := repo.NewGameplayRepo(database)
 	analysisRepo := repo.NewAnalysisRepo(database)
 
@@ -62,6 +60,9 @@ func main() {
 
 	gameplayApi := r.Group("/api/gameplay")
 	routes.GameplayRoutes(gameplayApi, cfg, gameplayService)
+
+	analysisApi := r.Group("/api/analysis")
+	routes.AnalysisRoutes(analysisApi, cfg, analysisService)
 
 	log.Printf("Base URL: http://localhost:%s/\n", cfg.Port)
 

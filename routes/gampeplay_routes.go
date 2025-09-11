@@ -10,6 +10,6 @@ import (
 func GameplayRoutes(router *gin.RouterGroup, cfg *config.Config, service *services.GameplayService) {
 	gameplayController := controllers.NewGameplayController(cfg, service)
 
-	router.POST("/:user_id/game/:game_id/move", gameplayController.PlayerMove)
+	router.POST("/game/:game_id/move", gameplayController.PlayerMove)
 	router.POST("/:user_id/game", gameplayController.CreateGame)
 }

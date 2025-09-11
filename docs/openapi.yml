@@ -4,11 +4,44 @@ info:
   description: API for moves and retrieving game play records
   version: 1.0.0
 paths:
-  /{user_id}/game/{game_id}/move:
+  /api/user:
     post:
-      summary: Post player game moves for every move
-      description: Post player's move to store and get a response of the bot's move
-      operationId: postMove
+      summary: Create a user with user id
+      description: Create a user
+      operationId: createUser
+      tags:
+        - User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: string
+                  example: asdhfawherpohweporhewioprhewpo
+      responses:
+        "200":
+          description: succesfull response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: string
+                    example: succesfully created user
+        "500":
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/gameplay/{user_id}/game:
+    post:
+      summary: Create a new game
+      description: Create a new game or start a new game
       tags:
         - Gameplay
       parameters:
@@ -20,6 +53,28 @@ paths:
             type: string
             format: uuid
             example: 23u7230ohdfohdfod-ewjarlewjr
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      project_id:
+                        type: string
+                        example: iweurpoweru2uiohewkrn
+  /api/gameplay/game/{game_id}/move:
+    post:
+      summary: Post player game moves for every move
+      description: Post player's move to store and get a response of the bot's move
+      operationId: postMove
+      tags:
+        - Gameplay
+      parameters:
         - name: game_id
           in: path
           description: Unique identifier of the game session
@@ -38,11 +93,14 @@ paths:
                 player_move:
                   type: string
                   description: player's move
-                  example: Nf3
+                  example: f1f3
                 fen:
                   type: string
                   description: snapshot or FEN of the current chess board
                   example: rnbqkbnr/pppppppp/8/8/8/5N2/PPPPPPPP/RNBQKB1R b KQkq - 1 1
+                bot_level:
+                  type: string
+                  example: "easy"
               required:
                 - field1
       responses:
@@ -56,26 +114,18 @@ paths:
                   bot_move:
                     type: string
                     description: bot's reply move to player's move
-                    example: e5
+                    example: e5e6
                   fen:
                     type: string
                     description: snapshot of the current chess board after bot's move
                     example: rnbqkbnr/pppp1ppp/8/4p3/8/5N2/PPPPPPPP/RNBQKB1R w KQkq - 0 2
-                  has_end:
-                    type: boolean
-                    description: to mark whether the game has ended or not
-                    example: false
-                  end_message:
-                    type: string
-                    description: to know type of ending (PlayerCheckMate, StaleMate, Draw, BotCheckMate, Resigned, NotEnd)
-                    example: NotEnd
         "500":
           description: Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /{user_id}/history:
+  /api/analysis/{user_id}/games:
     get:
       summary: Get a list of game histories
       description: Retrieves a list of games that has already ended (history)
@@ -109,16 +159,6 @@ paths:
                         game_id:
                           type: string
                           example: i3j4ojopadshfperewr
-                        fen:
-                          type: string
-                          example: rnbqkbnr/pp3ppp/8/2ppp3/3P4/2P2N2/PP2PPPP/RNBQKB1R w KQkq - 0 4
-                        end_type:
-                          type: string
-                          example: PlayerCheckMate
-                        result:
-                          type: string
-                          enum: [win, loss, draw]
-                          example: win
                         move_amount:
                           type: number
                           example: 34
@@ -128,21 +168,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /{user_id}/analysis/{game_id}/{move_order}:
+  /api/analysis/game/{game_id}/{move_order}:
     get:
       summary: Get the move and best move for that order
       description: Retrieves the move and best move during a specific order that happens in the game
       tags:
         - Analysis
       parameters:
-        - name: user_id
-          in: path
-          description: Unique identifier of the user/player
-          required: true
-          schema:
-            type: string
-            format: uuid
-            example: 5126f1ea-16ca-489d-8d98-eab1fecfdda7
         - name: game_id
           in: path
           description: Unique identifier of the game
@@ -166,15 +198,12 @@ paths:
               schema:
                 type: object
                 properties:
-                  color:
-                    type: string
-                    example: white
                   move:
                     type: string
-                    example: Nf3
+                    example: f3f7
                   best_move:
                     type: string
-                    example: e4
+                    example: e4e5
                   fen:
                     type: string
                     example: rnbqkbnr/pp3ppp/8/2ppp3/3P4/2P2N2/PP2PPPP/RNBQKB1R w KQkq - 0 4
@@ -184,21 +213,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /{user_id}/study/convert_image:
+  /api/study/convert_image:
     post:
       summary: Upload an image to convert into FEN
       description: Uploads a single image file to convert into FEN so that you can move pieces form that snapshot
       tags:
         - Study
-      parameters:
-        - name: user_id
-          in: path
-          required: true
-          description: unique identifier of the user
-          schema:
-            type: object
-            format: uuid
-            example: 5126f1ea-16ca-489d-8d98-eab1fecfdda7
       requestBody:
         required: true
         content:
