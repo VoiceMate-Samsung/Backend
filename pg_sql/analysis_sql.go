@@ -17,6 +17,5 @@ var (
 	GetMoveByOrder = `
 	SELECT move, fen FROM public.moves
 		WHERE game_id = $1 AND user_id = $2 AND move_order = $3
-
 	`
 )

@@ -17,7 +17,7 @@ CREATE DATABASE
 
 Export the PostgreSQL url to env.
 ```
-export POSTGRESQL_URL='postgres://postgres:password@localhost:5432/chessmate?sslmode=disable'
+export POSTGRESQL_URL='postgres://postgres@localhost:5432/chessmate?sslmode=disable'
 ```
 
 Run this command to migrate database (files inside schema), adjust db connection with our setup:
