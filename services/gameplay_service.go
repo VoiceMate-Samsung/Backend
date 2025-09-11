@@ -1,6 +1,8 @@
 package services
 
 import (
+	"fmt"
+
 	"samsungvoicebe/models"
 	"samsungvoicebe/repo"
 )
@@ -14,7 +16,12 @@ func NewGameplayService(gameplayRepo *repo.GameplayRepo) *GameplayService {
 }
 
 func (s *GameplayService) PlayerMove(userID, gameID, fen, move string) (models.BotMove, error) {
-	// TODO: continue from here to make the bot move and stuff
+	err := s.gameplayRepo.GameMove(userID, gameID, fen, move)
+	if err != nil {
+		fmt.Errorf("GameplayService-PlayerMove-GameMove: %w", err)
+		return models.BotMove{}, err
+	}
+
 	var botMove models.BotMove
 	return botMove, nil
 }

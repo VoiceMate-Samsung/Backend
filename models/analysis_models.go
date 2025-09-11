@@ -13,3 +13,14 @@ type Game struct {
 	Result     string `db:"result"`
 	EndType    string `db:"end_type"`
 }
+
+type StockfishAnalysisResult struct {
+	Fen      string
+	BestMove string
+}
+
+const (
+	BotLevelEasy   = 2
+	BotLevelMedium = 5
+	BotLevelhard   = 10
+)
