@@ -25,7 +25,6 @@ func NewGameplayController(cfg *config.Config, service *services.GameplayService
 func (gc *GameplayController) PlayerMove(c *gin.Context) {
 	gameID := c.Param("game_id")
 	userID := c.Param("user_id")
-	log.Printf("DEBUG: Controller received - userID: '%s', gameID: '%s'", userID, gameID)
 
 	var req models.PlayerMoveRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -43,5 +42,22 @@ func (gc *GameplayController) PlayerMove(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"data": botMove,
+	})
+}
+
+func (gc *GameplayController) CreateGame(c *gin.Context) {
+	userID := c.Param("user_id")
+
+	gameID, err := gc.Service.CreateGame(userID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		log.Println("GameplayController-CreateGame-CreateGame", err)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"data": gin.H{
+			"game_id": gameID,
+		},
 	})
 }

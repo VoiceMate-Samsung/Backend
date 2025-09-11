@@ -80,7 +80,5 @@ func (a *AnalysisService) StockfishAnalyze(fen string, botLevel string) (models.
 		Fen:      game.FEN(),
 	}
 
-	fmt.Println(analysisResult)
-
 	return analysisResult, nil
 }

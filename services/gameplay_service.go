@@ -20,7 +20,7 @@ func NewGameplayService(gameplayRepo *repo.GameplayRepo, analysisService *Analys
 }
 
 func (s *GameplayService) PlayerMove(userID, gameID, fen, move, botLevel string) (models.BotMove, error) {
-	err := s.gameplayRepo.GameMove(userID, gameID, fen, move)
+	err := s.gameplayRepo.GameMove(gameID, fen, move)
 	if err != nil {
 		err = fmt.Errorf("GameplayService-PlayerMove-GameMove: %w", err)
 		fmt.Printf("userID: %s, gameID: %s, fen: %s, move: %s", userID, gameID, fen, move)
@@ -41,4 +41,13 @@ func (s *GameplayService) PlayerMove(userID, gameID, fen, move, botLevel string)
 	}
 
 	return botMove, nil
+}
+
+func (s *GameplayService) CreateGame(userID string) (string, error) {
+	gameID, err := s.gameplayRepo.CreateGame(userID)
+	if err != nil {
+		err = fmt.Errorf("GameplayService-CreateGame-CreateGame: %w", err)
+		return "", err
+	}
+	return gameID, nil
 }
