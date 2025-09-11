@@ -25,7 +25,6 @@ Run this command to migrate database (files inside schema), adjust db connection
 migrate -verbose -path 'schema/' -database ${POSTGRESQL_URL} up
 ```
 
-
 To create a new migration, run:
 ```
 migrate create -ext sql -dir schema/ -format 20060102150405 init_mg
