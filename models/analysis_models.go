@@ -39,3 +39,4 @@ const GetFenFromPicturePrompt = `
 	Respond with only the FEN string and nothing else.
 	If the image is not an image of a chessboard or if you cannot determine the FEN, respond with "InvalidImage" and nothing else.
 `
+const InvalidImage = "InvalidImage"
